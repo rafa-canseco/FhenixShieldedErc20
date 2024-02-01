@@ -4,7 +4,7 @@ pragma solidity ^0.8.17;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import {FHE, euint8, inEuint8,euint32,ebool} from "@fhenixprotocol/contracts/FHE.sol";
 
-contract WrappingERC20 is ERC20 {
+contract WrappingERC2O is ERC20 {
 
     // Mapeo de balances encriptados por dirección
     mapping(address => euint32) internal _encBalances;

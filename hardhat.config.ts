@@ -17,10 +17,6 @@ const mnemonic: string | undefined = process.env.MNEMONIC;
 if (!mnemonic) {
   throw new Error("Please set your MNEMONIC in a .env file");
 }
-const privateKey: string | undefined = process.env.PRIVATE_KEY;
-if (!privateKey) {
-  throw new Error("Please set your PRIVATE_KEY in a .env file");
-}
 
 const infuraApiKey: string | undefined = process.env.INFURA_API_KEY;
 if (!infuraApiKey) {
@@ -53,7 +49,11 @@ function getChainConfig(chain: keyof typeof chainIds): NetworkUserConfig {
       jsonRpcUrl = "https://" + chain + ".infura.io/v3/" + infuraApiKey;
   }
   return {
-    accounts: [privateKey],
+    accounts: {
+      count: 10,
+      mnemonic,
+      path: "m/44'/60'/0'/0",
+    },
     chainId: chainIds[chain],
     url: jsonRpcUrl,
   };
@@ -84,12 +84,12 @@ const config: HardhatUserConfig = {
   },
   networks: {
     devnet: {
-      accounts: [privateKey],
-      chainId: 412346,
-      url: "https://test01.fhenix.zone/evm",
+      accounts: { mnemonic },
+      chainId: 5432,
+      url: "https://devnet.fhenix.io",
     },
     ci_localfhenix: {
-      accounts: [privateKey],
+      accounts: { mnemonic },
       chainId: 5432,
       url: "https://localfhenix:8545",
     },
@@ -99,11 +99,9 @@ const config: HardhatUserConfig = {
       url: "http://localhost:8545",
     },
     hardhat: {
-      // Asegúrate de que 'accounts' sea un array de strings
-      accounts: [{
-        privateKey: privateKey,
-        balance: "10000000000000000000000", // Puedes especificar el saldo inicial aquí si lo deseas
-      }],
+      accounts: {
+        mnemonic,
+      },
       chainId: chainIds.hardhat,
     },
     ganache: {
